@@ -1,11 +1,6 @@
-# Whitelist: only heavy/3D/game/benchmark apps use RTX 3050; macOS & daily apps stay on Iris Xe
-# Add any app process name on a new line to run it on RTX 3050 (takes effect on app restart)
-Blender
-Resolve
-Final Cut Pro
-Adobe Premiere Pro
-Steam
-CrossOver
-Whisky
-Geekbench 6
-MetalBench
+# NullMoth standard allow-list: per-app GPU choice is managed by NVMTLDriver's
+# GPUSelectionPolicy (ClevoSense > Graphics per app). macOS platform binaries and
+# WindowServer automatically stay on Intel Iris Xe.
+!VoiceMemos
+*
+!WindowServer

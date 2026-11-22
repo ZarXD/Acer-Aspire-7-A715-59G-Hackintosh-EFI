@@ -29,7 +29,7 @@ Companion EC/fan/RGB control stack: [ClevoSense-macOS](https://github.com/ZarXD/
 | Boot (Internal SSD) | ✅ | Silent non-verbose boot (`OpenCore 1.0.9`) |
 | AMFI & TCC Permissions | ✅ | AMFI **ON** via `NMLibVal` + `NMAppFree` + `AMFIPass`; native macOS Privacy/TCC prompts work |
 | Intel Iris Xe (Internal Panel) | ✅ | Full Metal 2 acceleration (`WhateverXe`), 1920x1080 @ 144Hz, smooth brightness keys |
-| NVIDIA RTX 3050 6GB (Metal Offload) | ✅ | Whitelisted apps via `/Library/GPUBundles/nvmtl-allow.txt`; RTD3 D3 Cold (`nvrtd3=2`) powers off dGPU when idle |
+| NVIDIA RTX 3050 6GB (Metal Offload) | ✅ | `NVMTLDriver` (`Thatisjigen` `acer/current`) supports per-app `Automatic` / `Power saving` / `Performance` in `ClevoSense-macOS`; RTD3 D3 Cold (`nvrtd3=2`) powers off dGPU when idle |
 | Audio (Speakers, Mic, 3.5mm ComboJack, HDMI) | ✅ | Auto-switching speakers/headphones + Headphones/Headset pop-up for IEM inline mic (`SimpleHDA` + `AppleALC` + `VerbStub` + `ComboJack`); NVIDIA HDMI/DP 8ch via `NMXAudio` |
 | Wi-Fi (Intel AX) | ✅ | Native Wi-Fi + AWDL stack via `ForbiddenItlwm` 0.6.0 |
 | Bluetooth | ✅ | Intel Wireless Bluetooth (`IntelBluetoothFirmware` + `BlueToolFixup` + `BTLEAdvFixup`) |
@@ -101,7 +101,10 @@ AMFI stays **enabled** (no `amfi=0x80` / `amfi_get_out_of_my_way=1`):
 
 - Internal display is wired to Intel Iris Xe (`WhateverXe.kext`).
 - RTX 3050 6GB (`NVRM.kext`, built from `Thatisjigen/nvidia-macos-driver` `acer/current` with `SSDT-DGPU-NEGT.aml`) powers down to D3 Cold automatically (`nvrtd3=2`) when idle.
-- `/Library/GPUBundles/nvmtl-allow.txt` whitelists heavy Metal/3D apps (Blender, Resolve, Final Cut Pro, Premiere, Steam, CrossOver, Whisky, Geekbench) to offload onto the RTX 3050 while keeping WindowServer and daily apps on Iris Xe.
+- **Dual GPU policy (`NVMTLDriver` + `ClevoSense-macOS`):** `NVMTLDriver.bundle` (built from `Thatisjigen/nvidia-macos-driver` `acer/current`) keeps `WindowServer` and macOS platform processes on Intel Iris Xe automatically while answering macOS `GPUSelectionPolicy` (`com.apple.gpu`) per app from **ClevoSense -> Graphics per app**:
+  - **Automatic:** Iris Xe is the default GPU; apps that explicitly choose a high-performance GPU can use the RTX 3050.
+  - **Power saving (`avoidRemovable`):** hides the RTX 3050 from that app (always Iris Xe).
+  - **Performance (`preferRemovable`):** makes the RTX 3050 that app's default Metal device.
 
 ## ClevoSense, RGB keyboard, and Fn hotkeys
 

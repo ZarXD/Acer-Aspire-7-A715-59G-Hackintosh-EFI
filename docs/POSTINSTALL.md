@@ -88,9 +88,22 @@ sudo launchctl enable system/com.XPS.ComboJack
 sudo launchctl bootstrap system /Library/LaunchDaemons/com.XPS.ComboJack.plist
 ```
 
-### 3.4 Configure Metal offload whitelist (`nvmtl-allow.txt`)
+### 3.4 Build `NVMTLDriver.bundle` for per-app GPU switching (`Graphics per app`)
 
-Copy the whitelist so macOS WindowServer and daily apps stay on Iris Xe while heavy 3D/compute/game apps use the RTX 3050:
+Build `NVMTLDriver` from `Thatisjigen/nvidia-macos-driver` (`acer/current`) so ClevoSense's **Graphics per app** menu (`Automatic`, `Power saving`, `Performance` via `com.apple.gpu` `GPUSelectionPolicy`) works natively without manual `.txt` editing:
+
+```bash
+cp patches/nullmoth/build_plugin_only.sh ~/build/nullmoth-jigen/
+bash ~/build/nullmoth-jigen/build_plugin_only.sh
+
+sudo cp ~/build/nullmoth-jigen/out/NVMTLDriver /Library/GPUBundles/NVMTLDriver.bundle/Contents/MacOS/NVMTLDriver
+sudo chown -R root:wheel /Library/GPUBundles/NVMTLDriver.bundle
+sudo chmod -R go-w,a+rX /Library/GPUBundles/NVMTLDriver.bundle
+sudo chmod 755 /Library/GPUBundles/NVMTLDriver.bundle/Contents/MacOS/NVMTLDriver
+sudo codesign -f -s - --identifier com.nullmoth.NVMTLDriver /Library/GPUBundles/NVMTLDriver.bundle
+```
+
+Then install the standard NullMoth allow-list (`!VoiceMemos`, `*`, `!WindowServer`) so `NVMTLDriver`'s built-in platform-binary filter + `GPUSelectionPolicy` manages per-app GPU assignment automatically:
 
 ```bash
 sudo cp patches/nullmoth/nvmtl-allow.txt /Library/GPUBundles/nvmtl-allow.txt
