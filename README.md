@@ -24,20 +24,29 @@ Companion EC/fan/RGB control stack: [ClevoSense-macOS](https://github.com/ZarXD/
 
 ## Status
 
-| Feature | State | Notes |
-| --- | --- | --- |
-| Boot (Internal SSD) | Working | Silent non-verbose boot, AMFI **ON** via `NMLibVal` + `NMAppFree` + `AMFIPass` |
-| Intel Iris Xe (Internal Panel) | Working | Full Metal 2 acceleration, 144Hz, brightness keys |
-| NVIDIA RTX 3050 6GB (Metal / Offload) | Working | Whitelisted apps via `/Library/GPUBundles/nvmtl-allow.txt`; RTD3 D3 Cold (`nvrtd3=2`) powers off dGPU when idle |
-| Audio (Speakers, Mic, Headphone, HDMI) | Working | Realtek ALC256 + NVIDIA HDMI/DP |
-| Wi-Fi & Bluetooth | Working | `ForbiddenItlwm` + Intel BT + `BTLEAdvFixup` (`-btleadv -btlenoscan`) |
-| Ethernet (RTL8111) | Working | Native gigabit link |
-| Touchpad & Keyboard | Working | Multi-touch gestures, Fn brightness, Fn volume |
-| Clevo RGB Keyboard & Fn Hotkeys | Working | 9 OEM color presets, 0-100% brightness (0% completely off), boot-off suppression, `Fn + / * - +` synced with `ClevoSense-macOS` |
-| Fan Control & Power Profiles | Working | Live CPU/GPU RPM & temps, Quiet / Performance / Entertainment / Power Saving profiles via `ClevoSense-macOS` |
-| Battery & Power Management | Working | Accurate charge %, AC detection, hybrid P/E-core scheduling |
-| Sleep / Wake | Partial | S3 wake after GPU-heavy freeze can leave display dark; see [docs/RECOVERY.md](docs/RECOVERY.md) |
-| WhateverXe WebKit GPU | Known issue | Occasional `com.apple.WebKit.GPU` / `AppleIntelTGLGraphics` hang in Safari; see [docs/RECOVERY.md](docs/RECOVERY.md) |
+| Feature | Status | Notes |
+| --- | :---: | --- |
+| Boot (Internal SSD) | ✅ | Silent non-verbose boot (`OpenCore 1.0.9`) |
+| AMFI & TCC Permissions | ✅ | AMFI **ON** via `NMLibVal` + `NMAppFree` + `AMFIPass`; native macOS Privacy/TCC prompts work |
+| Intel Iris Xe (Internal Panel) | ✅ | Full Metal 2 acceleration (`WhateverXe`), 1920x1080 @ 144Hz, smooth brightness keys |
+| NVIDIA RTX 3050 6GB (Metal Offload) | ✅ | Whitelisted apps via `/Library/GPUBundles/nvmtl-allow.txt`; RTD3 D3 Cold (`nvrtd3=2`) powers off dGPU when idle |
+| Audio (Speakers, Mic, 3.5mm, HDMI) | ✅ | Realtek ALC256 + NVIDIA HDMI/DP 8ch (`NMXAudio` + `SimpleHDA` + `AppleALC`) |
+| Wi-Fi (Intel AX) | ✅ | Native Wi-Fi + AWDL stack via `ForbiddenItlwm` 0.6.0 |
+| Bluetooth | ✅ | Intel Wireless Bluetooth (`IntelBluetoothFirmware` + `BlueToolFixup` + `BTLEAdvFixup`) |
+| AirDrop | ✅ | Working over `ForbiddenItlwm` AWDL + `BTLEAdvFixup` (`-btleadv -btlenoscan`) |
+| Continuity (Handoff, Clipboard, Instant Hotspot) | ✅ | BLE timeout fixed with `-btlenoscan` while keeping AirDrop active |
+| iServices (iCloud, iMessage, FaceTime, App Store) | ✅ | Working with valid generated `MacBookPro16,2` SMBIOS |
+| DRM (Netflix / Widevine in Chrome) | ✅ | Working via `NMAppFree.kext` |
+| Ethernet (Realtek RTL8111) | ✅ | Native Gigabit LAN |
+| USB Ports & Webcam | ✅ | All USB-A / USB-C ports and internal Chicony USB 2.0 webcam working (`USBToolBox`) |
+| Touchpad & Keyboard | ✅ | Multi-touch gestures (`VoodooI2CHID`), Fn brightness & volume keys |
+| Clevo RGB Keyboard & Fn Hotkeys | ✅ | 9 OEM color presets, 0-100% brightness (0% completely off), boot white-LED suppression, `Fn + / * - +` bi-directional sync with `ClevoSense-macOS` |
+| Fan Control & Power Profiles | ✅ | Live CPU/GPU RPM & temps, Quiet / Performance / Entertainment / Power Saving modes via `ClevoSense-macOS` |
+| Battery & FlexiCharger | ✅ | Accurate battery %, AC detection, multi-level charge limit (60-100% via `WMEX` in `SSDT-CLEVOSENSE`) |
+| CPU Power Management (Hybrid P+E) | ✅ | `IntelHybridCores` (`hcmode=4`) + `HybridPM` |
+| Sleep / Wake (S3) | ⚠️ | Normal S3 sleep/wake works (`SSDT-GPRW`), but sleeping during a wedged GPU state can leave the screen dark; see [docs/RECOVERY.md](docs/RECOVERY.md) |
+| Safari WebKit GPU Stability | ⚠️ | Heavy WebKit GPU sessions can occasionally deadlock `AppleIntelTGLGraphics`; Chromium/Firefox recommended for heavy workloads; see [docs/RECOVERY.md](docs/RECOVERY.md) |
+| FairPlay / Apple TV+ DRM (Safari) | ❌ | Hardware FairPlay DRM is not supported on patched Intel Iris Xe (`WhateverXe`) |
 
 ## Repository layout
 
