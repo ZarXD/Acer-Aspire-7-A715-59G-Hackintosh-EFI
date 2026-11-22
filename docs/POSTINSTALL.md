@@ -71,7 +71,24 @@ sudo bash ~/build/nullmoth-jigen/install_nvrm_jigen.sh
 
 `install_nvrm_jigen.sh` backs up the previous `NVRM.kext` and `AuxiliaryKernelExtensions.kc`, installs the freshly built `NVRM.kext`, and rebuilds the Auxiliary Kernel Collection with `kmutil`.
 
-### 3.3 Configure Metal offload whitelist (`nvmtl-allow.txt`)
+### 3.3 Scope `NMXAudio.kext` to NVIDIA HDMI/DP only (for Realtek ALC256 + ComboJack)
+
+By default, `NMXAudio.kext` matches all HDA controllers (`0x04030000&0xffff0000`) with `IOProbeScore = 5000`, hijacking Intel `HDEF@1F,3` (Realtek ALC256) from `SimpleHDA` + `AppleALC` and breaking auto jack switching and `ComboJack`.
+
+Scope `NMXAudio.kext` exclusively to the RTX 3050 HDMI/DP audio controller (`0x229110de`) so ALC256 stays on `SimpleHDA` + `AppleALC` (`layout-id=13`) + `VerbStub` + `ComboJack`:
+
+```bash
+sudo ./patches/nullmoth/scope_nmxaudio_hdmi.sh
+```
+
+Ensure `SimpleHDA`'s Apple-signed `AppleHDAHALPlugIn.bundle` is installed in `/Library/Audio/Plug-Ins/SimpleHDA/` and `ComboJack` (`/usr/local/sbin/ComboJack`, `/Library/LaunchDaemons/com.XPS.ComboJack.plist`) is enabled:
+
+```bash
+sudo launchctl enable system/com.XPS.ComboJack
+sudo launchctl bootstrap system /Library/LaunchDaemons/com.XPS.ComboJack.plist
+```
+
+### 3.4 Configure Metal offload whitelist (`nvmtl-allow.txt`)
 
 Copy the whitelist so macOS WindowServer and daily apps stay on Iris Xe while heavy 3D/compute/game apps use the RTX 3050:
 

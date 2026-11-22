@@ -13,7 +13,7 @@ Companion EC/fan/RGB control stack: [ClevoSense-macOS](https://github.com/ZarXD/
 | iGPU | Intel Iris Xe (`0xa7a8`, 1536 MB, Metal 2) | `WhateverXe` 0.8.3 + `/Library/Extensions/AppleIntelTGL*` + `/Library/GPUBundles/AppleIntelTGL*` |
 | Display | 15.6" 1920x1080 @ 144Hz eDP | `SSDT-PNLF` + `BrightnessKeys` |
 | dGPU | NVIDIA GeForce RTX 3050 6GB Laptop (`0x25ac`) | NullMoth `NVRM` / `NVAccel` / `NVRMFB` / `NVRMAGDC` + `NVMTLDriver` + `SMCNvidiaGPU` (`nvrtd3=2`) |
-| Audio | Realtek ALC256 + NVIDIA HDMI/DP 8ch | `NMXAudio` + `SimpleHDA` + `AppleALC` |
+| Audio | Realtek ALC256 + NVIDIA HDMI/DP 8ch | `SimpleHDA` + `AppleALC` (`layout-id=13`) + `VerbStub` + `ComboJack` (ALC256); `NMXAudio` scoped to `0x229110de` (NVIDIA HDMI/DP) |
 | Wi-Fi | Intel Wi-Fi 6 (`en0`) | `ForbiddenItlwm` 0.6.0 (AWDL flags enabled) |
 | Bluetooth | Intel Wireless Bluetooth | `IntelBluetoothFirmware` 2.5.0 + `BlueToolFixup` + `BTLEAdvFixup` |
 | Ethernet | Realtek RTL8111 (`en1`) | `RealtekRTL8111` 2.4.2 |
@@ -30,7 +30,7 @@ Companion EC/fan/RGB control stack: [ClevoSense-macOS](https://github.com/ZarXD/
 | AMFI & TCC Permissions | ✅ | AMFI **ON** via `NMLibVal` + `NMAppFree` + `AMFIPass`; native macOS Privacy/TCC prompts work |
 | Intel Iris Xe (Internal Panel) | ✅ | Full Metal 2 acceleration (`WhateverXe`), 1920x1080 @ 144Hz, smooth brightness keys |
 | NVIDIA RTX 3050 6GB (Metal Offload) | ✅ | Whitelisted apps via `/Library/GPUBundles/nvmtl-allow.txt`; RTD3 D3 Cold (`nvrtd3=2`) powers off dGPU when idle |
-| Audio (Speakers, Mic, 3.5mm, HDMI) | ✅ | Realtek ALC256 + NVIDIA HDMI/DP 8ch (`NMXAudio` + `SimpleHDA` + `AppleALC`) |
+| Audio (Speakers, Mic, 3.5mm ComboJack, HDMI) | ✅ | Auto-switching speakers/headphones + Headphones/Headset pop-up for IEM inline mic (`SimpleHDA` + `AppleALC` + `VerbStub` + `ComboJack`); NVIDIA HDMI/DP 8ch via `NMXAudio` |
 | Wi-Fi (Intel AX) | ✅ | Native Wi-Fi + AWDL stack via `ForbiddenItlwm` 0.6.0 |
 | Bluetooth | ✅ | Intel Wireless Bluetooth (`IntelBluetoothFirmware` + `BlueToolFixup` + `BTLEAdvFixup`) |
 | AirDrop | ✅ | Working over `ForbiddenItlwm` AWDL + `BTLEAdvFixup` (`-btleadv -btlenoscan`) |
@@ -85,7 +85,7 @@ Current SSD `boot-args` in `EFI/OC/config.plist` (add `-v` on USB when debugging
 | `ipc_control_port_options=0 -allow3d -disablegfxfirmware -igfxdvmt -wex-va-renderer` | WhateverXe Iris Xe acceleration, DVMT bypass, and VA renderer flags |
 | `hcmode=4` | `IntelHybridCores` P/E-core scheduling mode |
 | `ssioec=generic` | Enable custom Clevo EC backend in `SMCSuperIO.kext` |
-| `shda-lang=en -shdahaloff` | `SimpleHDA` language and HAL toggle |
+| `shda-lang=en` | `SimpleHDA` English audio device localization (with Apple-signed `AppleHDAHALPlugIn.bundle`) |
 | `-btleadv -btlenoscan` | `BTLEAdvFixup` advertising fix without active scan stalling |
 | `-itlawdl* itlawdlintcoal=4 itlawdltxqueue=4096 -itllog itlwm_lqmint=10 itlwm_scanout=240` | `ForbiddenItlwm` AWDL/Wi-Fi coexistence tuning |
 

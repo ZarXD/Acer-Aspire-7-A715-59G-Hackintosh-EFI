@@ -10,6 +10,7 @@ Archived build scripts and configuration files for the NVIDIA GeForce RTX 3050 6
   - `watchthelight-labs/NvGfx` (`nvgfx-2.6.2`, commit `04f011e`)
 - `install_nvrm_jigen.sh` — backs up existing `/Library/Extensions/NVRM.kext` + `AuxiliaryKernelExtensions.kc`, installs the freshly built `NVRM.kext`, and rebuilds the Auxiliary Kernel Collection via `kmutil`.
 - `NMLibVal-Info.plist` — bundle metadata reference for `NMLibVal.kext` (`org.anv1552.NMLibVal`), which enables loading unsigned GPU Metal bundles while keeping AMFI enabled.
+- `NMXAudio-Info.plist` & `scope_nmxaudio_hdmi.sh` — restricts `/Library/Extensions/NMXAudio.kext` to the NVIDIA RTX 3050 HDMI/DP audio device (`IOPCIMatch: 0x229110de`) and rebuilds `AuxiliaryKernelExtensions.kc` so Realtek ALC256 (`HDEF@1F,3`) remains handled by `SimpleHDA` + `AppleALC` + `VerbStub` + `ComboJack`.
 - `nvmtl-allow.txt` — installed at `/Library/GPUBundles/nvmtl-allow.txt` to whitelist specific Metal/3D/game apps onto the RTX 3050 while keeping WindowServer and daily apps on Intel Iris Xe.
 
 See [docs/POSTINSTALL.md](../../docs/POSTINSTALL.md) for step-by-step build and installation instructions.
