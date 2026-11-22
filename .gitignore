@@ -1,0 +1,19 @@
+# macOS metadata
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+.fseventsd
+
+# Windows metadata
+Thumbs.db
+desktop.ini
+
+# Temporary backups and build outputs
+*.bak*
+*.backup*
+*.lst
+build/
+private/

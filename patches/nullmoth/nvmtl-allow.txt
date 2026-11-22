@@ -1,0 +1,11 @@
+# Whitelist: only heavy/3D/game/benchmark apps use RTX 3050; macOS & daily apps stay on Iris Xe
+# Add any app process name on a new line to run it on RTX 3050 (takes effect on app restart)
+Blender
+Resolve
+Final Cut Pro
+Adobe Premiere Pro
+Steam
+CrossOver
+Whisky
+Geekbench 6
+MetalBench
