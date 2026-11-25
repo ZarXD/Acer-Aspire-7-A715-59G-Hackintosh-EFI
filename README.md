@@ -38,7 +38,7 @@ Companion EC/fan/RGB control stack: [ClevoSense-macOS](https://github.com/ZarXD/
 | iServices (iCloud, iMessage, FaceTime, App Store) | ✅ | Working with valid generated `MacBookPro16,2` SMBIOS |
 | DRM (Netflix / Widevine in Chrome) | ✅ | Working via `NMAppFree.kext` |
 | Ethernet (Realtek RTL8111) | ✅ | Native Gigabit LAN |
-| USB Ports & Webcam | ✅ | All USB-A / USB-C ports and internal Chicony USB 2.0 webcam working (`USBToolBox`) |
+| USB Ports & Webcam | ✅ | Custom `UTBMap.kext` (`USBToolBox`): all USB-A / USB-C ports active, Intel AX201 Bluetooth (`HS10`) & Chicony Webcam (`HS08`) mapped as Internal (`255`) |
 | Touchpad & Keyboard | ✅ | Multi-touch gestures (`VoodooI2CHID`), Fn brightness & volume keys |
 | Clevo RGB Keyboard & Fn Hotkeys | ✅ | 9 OEM color presets, 0-100% brightness (0% completely off), boot white-LED suppression, `Fn + / * - +` bi-directional sync with `ClevoSense-macOS` |
 | Fan Control & Power Profiles | ✅ | Live CPU/GPU RPM & temps, Quiet / Performance / Entertainment / Power Saving modes via `ClevoSense-macOS` |
